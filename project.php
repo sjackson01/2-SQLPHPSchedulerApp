@@ -15,8 +15,17 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     if(empty($title) || empty($category)){
         $error_message = 'Please fill in the required fields: Title, Category';
     }else{
-        echo "title = $title <br/>";
-        echo "category = $category <br/>";
+        
+       //Insert $title and $category records into projects table
+       if(add_project($title, $category)){
+            //Successful insert (true returned) re-direct to project list page
+            header('project_list.php');
+            exit;
+       }else{
+            //Unsuccessful insert (false returned) display error message
+            $error_message = 'Could not add project';
+       }
+
     }
 }
 include 'inc/header.php';
