@@ -19,7 +19,7 @@ function add_project($title, $category){
     include 'connection.php';
     //Insert record into title and cateogry
     //Value placeholders 
-    $sql = 'INSERT INTO projects(title, category)  VALUE(?, ?)';
+    $sql = 'INSERT INTO projects(title, category)  VALUES(?, ?)';
 
     try {
         //Pass $sql insert into prepared statement
