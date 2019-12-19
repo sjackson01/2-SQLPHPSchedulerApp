@@ -4,6 +4,21 @@ require 'inc/functions.php';
 $pageTitle = "Project | Time Tracker";
 $page = "projects";
 
+//Receive input through title text box and category dropdown 
+//Verify request method is POST 
+if($_SERVER['REQUEST_METHOD'] == 'POST'){
+    //Filter input and remove white space from beginning and end of our feilds 
+    $title = trim(filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING));
+    $category = trim(filter_input(INPUT_POST, 'category', FILTER_SANITIZE_STRING));
+
+    //Fields are manditory make sure fields are not empty
+    if(empty($title) || empty($category)){
+        $error_message = 'Please fill in the required fields: Title, Category';
+    }else{
+        echo "title = $title <br/>";
+        echo "category = $category <br/>";
+    }
+}
 include 'inc/header.php';
 ?>
 
