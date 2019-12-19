@@ -26,7 +26,12 @@ include 'inc/header.php';
     <div class="col-container page-container">
         <div class="col col-70-md col-60-lg col-center">
             <h1 class="actions-header">Add Project</h1>
-
+            <!-- TEST display error message --> 
+            <?php
+            if(isset($error_message)){
+                echo "<p class='message'>$error_message</p>";
+            }
+            ?>
             <form class="form-container form-add" method="post" action="project.php">
                 <table>
                     <tr>
