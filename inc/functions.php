@@ -15,6 +15,24 @@ function get_project_list(){
 
 }
 
+function get_task_list(){
+    //Include db connection
+    include 'connection.php';
+
+    //Pull task information
+    $sql = 'SELECT tasks.*, projects.title as project FROM tasks'
+        . ' JOIN projects ON tasks.project_id = projects.project_id';
+
+    
+    try {
+    return $db->query($sql);
+    } catch (Exception $e){
+        echo "Error!: " . $e->getMessage() . "</br>";
+        return array();
+    }
+
+}
+
 function add_project($title, $category){
     include 'connection.php';
     //Insert record into title and cateogry
