@@ -19,7 +19,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
        //Insert $title and $category records into projects table
        if(add_project($title, $category)){
             //Successful insert (true returned) re-direct to project list page
-            header('project_list.php');
+            header('Location: project_list.php');
             exit;
        }else{
             //Unsuccessful insert (false returned) display error message
