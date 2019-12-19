@@ -32,5 +32,7 @@ function add_project($title, $category){
         $result->execute();
     }catch (Exception $e){
         echo "Error: " . $e->getMessage() . "<br /> ";
+        return false;
     }
+    return true;
 }
