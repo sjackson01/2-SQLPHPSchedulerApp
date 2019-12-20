@@ -4,6 +4,32 @@ require 'inc/functions.php';
 $pageTitle = "Task | Time Tracker";
 $page = "tasks";
 
+//Receive input through inputs 
+//Verify request method is POST 
+if($_SERVER['REQUEST_METHOD'] == 'POST'){
+    //Filter input and remove white space from beginning and end of our feilds 
+    $project_id= trim(filter_input(INPUT_POST, 'project_id', FILTER_SANITIZE_NUMBER_INT));
+    $title = trim(filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING));
+    $date = trim(filter_input(INPUT_POST, 'date', FILTER_SANITIZE_STRING));
+    $time = trim(filter_input(INPUT_POST, 'time', FILTER_SANITIZE_NUMBER_INT));
+
+    //Fields are manditory make sure fields are not empty
+    if(empty($project_id) || empty($title) || empty($date) || empty($time)){
+        $error_message = 'Please fill in the required fields: Title, Category';
+    }else{
+        
+       //Insert $title and $category records into projects table
+       if(add_task($project_id, $title, $date, $time)){
+            //Successful insert (true returned) re-direct to task list page
+            header('Location: task_list.php');
+            exit;
+       }else{
+            //Unsuccessful insert (false returned) display error message
+            $error_message = 'Could not add task';
+       }
+
+    }
+}
 include 'inc/header.php';
 ?>
 
