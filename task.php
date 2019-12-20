@@ -15,7 +15,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
     //Fields are manditory make sure fields are not empty
     if(empty($project_id) || empty($title) || empty($date) || empty($time)){
-        $error_message = 'Please fill in the required fields: Title, Category';
+        $error_message = 'Please fill in the required fields: Title, Category, 
+        Date, and Time';
     }else{
         
        //Insert $title and $category records into projects table
@@ -37,6 +38,12 @@ include 'inc/header.php';
     <div class="col-container page-container">
         <div class="col col-70-md col-60-lg col-center">
             <h1 class="actions-header">Add Task</h1>
+            <!-- Display error message if input field empty -->
+            <?php
+            if(isset($error_message)){
+                echo "<p class='message'>$error_message</p>";
+            }
+            ?>
             <form class="form-container form-add" method="post" action="task.php">
                 <table>
                     <tr>
