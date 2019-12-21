@@ -1,6 +1,5 @@
 <?php
 
-
 try{
 //Create empty object of the PDO class
 //Use PDO driver to connect SQLite to PHP 
@@ -13,5 +12,3 @@ $db->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
     echo $e->getMessage();
     exit;
 }
-
-?> 
