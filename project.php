@@ -4,6 +4,30 @@ require 'inc/functions.php';
 $pageTitle = "Project | Time Tracker";
 $page = "projects";
 
+//Receive input through title text box and category dropdown 
+//Verify request method is POST 
+if($_SERVER['REQUEST_METHOD'] == 'POST'){
+    //Filter input and remove white space from beginning and end of our feilds 
+    $title = trim(filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING));
+    $category = trim(filter_input(INPUT_POST, 'category', FILTER_SANITIZE_STRING));
+
+    //Fields are manditory make sure fields are not empty
+    if(empty($title) || empty($category)){
+        $error_message = 'Please fill in the required fields: Title, Category';
+    }else{
+        
+       //Insert $title and $category records into projects table
+       if(add_project($title, $category)){
+            //Successful insert (true returned) re-direct to project list page
+            header('Location: project_list.php');
+            exit;
+       }else{
+            //Unsuccessful insert (false returned) display error message
+            $error_message = 'Could not add project';
+       }
+
+    }
+}
 include 'inc/header.php';
 ?>
 
@@ -11,7 +35,12 @@ include 'inc/header.php';
     <div class="col-container page-container">
         <div class="col col-70-md col-60-lg col-center">
             <h1 class="actions-header">Add Project</h1>
-
+            <!-- TEST display error message --> 
+            <?php
+            if(isset($error_message)){
+                echo "<p class='message'>$error_message</p>";
+            }
+            ?>
             <form class="form-container form-add" method="post" action="project.php">
                 <table>
                     <tr>
