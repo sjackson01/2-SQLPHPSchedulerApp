@@ -17,12 +17,25 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     $date = trim(filter_input(INPUT_POST, 'date', FILTER_SANITIZE_STRING));
     $time = trim(filter_input(INPUT_POST, 'time', FILTER_SANITIZE_NUMBER_INT));
 
+    //Use explode() takes two parameters a string delimiter and a string returns array
+    //Creates 3 item array with each part of the date as an element
+    $dateMatch = explode('/',$date);
+
     //Fields are manditory make sure fields are not empty
     if(empty($project_id) || empty($title) || empty($date) || empty($time)){
         $error_message = 'Please fill in the required fields: Title, Category, 
         Date, and Time';
-    }else{
-        
+    /* Check if 3 parts of date are passed and each has the correct # of chars */    
+    }elseif(count($dateMatch) != 3 
+          || strlen($dateMatch[0]) != 2
+          || strlen($dateMatch[1]) != 2
+          /* 2001 year format */ 
+          || strlen($dateMatch[2]) != 4
+          /* Check for valid date pass: Month, Day, Year */ 
+          || !checkdate($dateMatch[0], $dateMatch[1], $dateMatch[2]))
+          {
+        $error_message = 'Invalide Date';
+    }else{    
        //Insert $title and $category records into projects table
        if(add_task($project_id, $title, $date, $time)){
             //Successful insert (true returned) re-direct to task list page
