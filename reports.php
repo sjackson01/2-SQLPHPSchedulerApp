@@ -24,6 +24,7 @@ include 'inc/header.php';
                 <label for='filter'>Filter: </label>
                 <select id='filter' name='filter'>
                     <option value=''>Select One</option>
+                    <optgroup label="Project">
                     <!-- Use PHP to pull project information with a foreach loop --> 
                     <?php
                         foreach(get_project_list() as $item){
@@ -31,6 +32,13 @@ include 'inc/header.php';
                             echo $item['title'] . "</option>\n";
                         }
                     ?>
+                    </option>
+                    <!-- Add category to filter drop down --> 
+                    <optgroup ="Category">
+                        <option value="category:billable">Billable</option>
+                        <option value="category:Charity">Charity</option>
+                        <option value="category:Personal">Personal</option>
+                    </optgroup>
                 </select>
                 <input class="button" type="submit" value="Run" />
         </div>
