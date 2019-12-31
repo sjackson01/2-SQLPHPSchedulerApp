@@ -15,21 +15,59 @@ function get_project_list(){
 
 }
 
-function get_task_list(){
+function get_task_list($filter = null){
     //Include db connection
     include 'connection.php';
 
     //Pull task information
     $sql = 'SELECT tasks.*, projects.title as project FROM tasks'
         . ' JOIN projects ON tasks.project_id = projects.project_id';
-
     
+    //Add where clause to work with dropdown menu in reports
+    $where ='';
+    
+    //Only use where clause if filter parameter is array 
+    if(is_array($filter)){
+        switch($filter[0]) {
+            case 'project':
+                $where = ' WHERE projects.project_id = ?';
+                break;
+            case 'category':
+                $where = ' WHERE category = ?';
+                break;
+            //Add case that checks if record is between ranges        
+            case 'date':
+                $where = ' WHERE date >= ? AND date <= ?';  
+                break; 
+            }
+        }
+
+    //Order tasks by date    
+    $orderBy = ' ORDER BY date DESC';
+
+    //If filter parameter is not null change orderBy 
+    if($filter){
+        $orderBy = ' ORDER BY projects.title ASC, date DESC';
+    }
     try {
-    return $db->query($sql);
+    //Concantenate SQL statments together and prepare    
+    $results = $db->prepare($sql . $where . $orderBy);
+        //Bind parameters 
+        if(is_array($filter)){
+            $results->bindValue(1, $filter[1]);
+        //Bind dates if filter = 'date
+        if($filter[0]== 'date'){
+            $results->bindValue(2, $filter[2], PDO::PARAM_STR); 
+        }
+    }
+    $results->execute();
     } catch (Exception $e){
         echo "Error!: " . $e->getMessage() . "</br>";
         return array();
     }
+    
+    //Feth as associative array 
+    return $results->fetchAll(PDO::FETCH_ASSOC);
 
 }
 
@@ -54,6 +92,25 @@ function add_project($title, $category){
     }
     return true;
 }
+
+function get_project($project_id){
+    include 'connection.php';
+    $sql = 'SELECT * FROM projects WHERE project_id = ?';
+
+    try {
+        //Pass $sql insert into prepared statement
+        $results = $db->prepare($sql);
+        //Bind $project_id argument to value placeholder and define parameter
+        $results->bindValue(1,$project_id, PDO::PARAM_INT);
+        //Execute the query
+        $results->execute();
+    }catch (Exception $e){
+        echo "Error: " . $e->getMessage() . "<br /> ";
+        return false;
+    }
+    return $results->fetch();
+}
+
 
 function add_task($project_id, $title, $date, $time){
     include 'connection.php';
