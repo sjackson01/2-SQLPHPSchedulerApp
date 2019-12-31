@@ -33,7 +33,7 @@ include 'inc/header.php';
                         echo $filter[1];
                         break;
                     case 'date';
-                        echo $filter[1] . " - " . filter[2];  
+                        echo $filter[1] . " - " . $filter[2];  
                         break; 
                 }
             }
@@ -53,7 +53,7 @@ include 'inc/header.php';
                     ?>
                     <!-- Add category to filter drop down --> 
                     <optgroup label="Category">
-                        <option value="category:billable">Billable</option>
+                        <option value="category:Billable">Billable</option>
                         <option value="category:Charity">Charity</option>
                         <option value="category:Personal">Personal</option>
                     </optgroup>
@@ -61,7 +61,7 @@ include 'inc/header.php';
                     <optgroup label="Date">
                         <option value="date: <?php
                         //Calculate start date of last week
-                        date('m/d/Y',strtotime('-2 Sunday'));
+                        echo date('m/d/Y',strtotime('-2 Sunday'));
                         echo":";
                         //Calculate end date
                         echo date('m/d/Y',strtotime('-1 Saturday'));
@@ -69,7 +69,7 @@ include 'inc/header.php';
 
                         <option value="date: <?php
                         //Calculate start date of last week
-                        date('m/d/Y',strtotime('-2 Sunday'));
+                        echo date('m/d/Y',strtotime('-1 Sunday'));
                         echo":";
                         //Calculate end date remove string to time to display today date
                         echo date('m/d/Y');
@@ -77,7 +77,7 @@ include 'inc/header.php';
 
                         <option value="date: <?php
                         //Calculate start date of last month
-                        date('m/d/Y',strtotime('first day of last month'));
+                        echo date('m/d/Y',strtotime('first day of last month'));
                         echo":";
                         //Calculate end date last day of last month
                         echo date('m/d/Y',strtotime('last day of last month'));
@@ -85,7 +85,7 @@ include 'inc/header.php';
 
                          <option value="date: <?php
                         //Calculate start date of this month
-                        date('m/d/Y',strtotime('first day of this month'));
+                        echo date('m/d/Y',strtotime('first day of this month'));
                         echo":";
                         //Calculate end date remove strtotime 
                         echo date('m/d/Y');
