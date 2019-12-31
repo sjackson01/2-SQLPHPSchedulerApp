@@ -93,6 +93,25 @@ function add_project($title, $category){
     return true;
 }
 
+function get_project($project_id){
+    include 'connection.php';
+    $sql = 'SELECT * FROM projects WHERE project_id = ?';
+
+    try {
+        //Pass $sql insert into prepared statement
+        $results = $db->prepare($sql);
+        //Bind $project_id argument to value placeholder and define parameter
+        $results->bindValue(1,$project_id, PDO::PARAM_INT);
+        //Execute the query
+        $results->execute();
+    }catch (Exception $e){
+        echo "Error: " . $e->getMessage() . "<br /> ";
+        return false;
+    }
+    return $results->fetch();
+}
+
+
 function add_task($project_id, $title, $date, $time){
     include 'connection.php';
     //Insert record into project_id title date and time
