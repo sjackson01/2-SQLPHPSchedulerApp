@@ -15,21 +15,31 @@ function get_project_list(){
 
 }
 
-function get_task_list(){
+function get_task_list($filter = null){
     //Include db connection
     include 'connection.php';
 
     //Pull task information
     $sql = 'SELECT tasks.*, projects.title as project FROM tasks'
         . ' JOIN projects ON tasks.project_id = projects.project_id';
-
     
+    //Order tasks by date    
+    $orderBy = ' ORDER BY date DESC';
+
+    //If filter paramter is not null change orderBy 
+    if($filter){
+        $orderBy = ' ORDER BY projects.title ASC, date DESC';
+    }
     try {
-    return $db->query($sql);
+    $results = $db->prepare($sql . $orderBy);
+    $results->execute();
     } catch (Exception $e){
         echo "Error!: " . $e->getMessage() . "</br>";
         return array();
     }
+    
+    //Feth as associative array 
+    return $results->fetchAll(PDO::FETCH_ASSOC);
 
 }
 
