@@ -32,13 +32,46 @@ include 'inc/header.php';
                             echo $item['title'] . "</option>\n";
                         }
                     ?>
-                    </option>
                     <!-- Add category to filter drop down --> 
-                    <optgroup ="Category">
+                    <optgroup label="Category">
                         <option value="category:billable">Billable</option>
                         <option value="category:Charity">Charity</option>
                         <option value="category:Personal">Personal</option>
                     </optgroup>
+                    <!-- Add dates range to filter drop down --> 
+                    <optgroup label="Date">
+                        <option value="date: <?php
+                        //Calculate start date of last week
+                        date('m/d/Y',strtotime('-2 Sunday'));
+                        echo":";
+                        //Calculate end date
+                        echo date('m/d/Y',strtotime('-1 Saturday'));
+                        ?>"> Last Week </option>
+
+                        <option value="date: <?php
+                        //Calculate start date of last week
+                        date('m/d/Y',strtotime('-2 Sunday'));
+                        echo":";
+                        //Calculate end date remove string to time to display today date
+                        echo date('m/d/Y');
+                        ?>"> This Week </option>
+
+                        <option value="date: <?php
+                        //Calculate start date of last month
+                        date('m/d/Y',strtotime('first day of last month'));
+                        echo":";
+                        //Calculate end date last day of last month
+                        echo date('m/d/Y',strtotime('last day of last month'));
+                        ?>"> Last Month </option>
+
+                         <option value="date: <?php
+                        //Calculate start date of this month
+                        date('m/d/Y',strtotime('first day of this month'));
+                        echo":";
+                        //Calculate end date remove strtotime 
+                        echo date('m/d/Y');
+                        ?>"> This Month </option>
+                    </optgroup>    
                 </select>
                 <input class="button" type="submit" value="Run" />
         </div>
