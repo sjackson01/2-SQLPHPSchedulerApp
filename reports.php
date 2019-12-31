@@ -12,6 +12,20 @@ include 'inc/header.php';
     <div class="col col-70-md col-60-lg col-center">
         <div class="col-container">
             <h1 class='actions-header'>Reports</h1>
+            <!-- Add form to manage reports --> 
+            <form class='form-container form-report' action='reports.php' method='get'>
+                <label for='filter'>Filter: </label>
+                <select id='filter' name='filter'>
+                    <option value=''>Select One</option>
+                    <!-- Use PHP to pull project information with a foreach loop --> 
+                    <?php
+                        foreach(get_project_list() as $item){
+                            echo '<option value="project:' . $item['project_id'] . '">';
+                            echo $item['title'] . "</option>\n";
+                        }
+                    ?>
+                </select>
+                <input class="button" type="submit" value="Run" />
         </div>
         <div class="section page">
             <div class="wrapper">
