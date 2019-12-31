@@ -23,15 +23,29 @@ function get_task_list($filter = null){
     $sql = 'SELECT tasks.*, projects.title as project FROM tasks'
         . ' JOIN projects ON tasks.project_id = projects.project_id';
     
+    //Add where clause to work with dropdown menu in reports
+    $where ='';
+    //Only use where clause if filter paramter is array 
+    if(is_array($filter)){
+        if($filter[0] == 'project'){
+            $where = ' WHERE projects.project_id = ?';
+        }
+        
+    }
+
     //Order tasks by date    
     $orderBy = ' ORDER BY date DESC';
 
-    //If filter paramter is not null change orderBy 
+    //If filter parameter is not null change orderBy 
     if($filter){
         $orderBy = ' ORDER BY projects.title ASC, date DESC';
     }
     try {
-    $results = $db->prepare($sql . $orderBy);
+    //Concantenate SQL statments together and prepare    
+    $results = $db->prepare($sql . $where . $orderBy);
+    if(is_array($filter)){
+    $results->bindValue(1, $filter[1], PDO::PARAM_INT);
+    }
     $results->execute();
     } catch (Exception $e){
         echo "Error!: " . $e->getMessage() . "</br>";

@@ -6,6 +6,13 @@ $pageTitle = "Reports | Time Tracker";
 //Passed to the get task list function
 $filter = 'all';
 
+//Set filter variable = to query string value recieved from drop down menu
+if(!empty($_GET['filter'])){
+    //Change into an array of values with explode and filter
+    $filter =  explode(':',filter_input(INPUT_GET,'filter',FILTER_SANITIZE_STRING));
+}
+
+
 include 'inc/header.php';
 ?>
 <div class="col-container page-container">
