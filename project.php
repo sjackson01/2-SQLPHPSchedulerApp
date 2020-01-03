@@ -3,6 +3,7 @@ require 'inc/functions.php';
 
 $pageTitle = "Project | Time Tracker";
 $page = "projects";
+$title = $category = '';
 
 //Get id from query string link in project_list.php 
 //Use id to pull project details using get project funtion
@@ -62,18 +63,45 @@ include 'inc/header.php';
                 <table>
                     <tr>
                         <th><label for="title">Title<span class="required">*</span></label></th>
-                        <td><input type="text" id="title" name="title" value="" /></td>
+                        <td><input type="text" id="title" name="title" value="<?php echo  $title; ?>" /></td>
                     </tr>
                     <tr>
                         <th><label for="category">Category<span class="required">*</span></label></th>
                         <td><select id="category" name="category">
                                 <option value="">Select One</option>
-                                <option value="Billable">Billable</option>
-                                <option value="Charity">Charity</option>
-                                <option value="Personal">Personal</option>
+                                <option value="Billable" 
+                                        <?php 
+                                        /* Display values after resubmit */
+                                        if($category == 'Billable'){
+                                            echo ' selected';
+                                        }
+                                        ?>
+                                        >Billable</option>
+                                <option value="Charity"
+                                    <?php 
+                                        /* Display values after resubmit */
+                                        if($category == 'Charity'){
+                                            echo ' selected';
+                                        }
+                                    ?>
+                                >Charity</option>
+                                <option value="Personal"
+                                    <?php 
+                                        /* Display values after resubmit */
+                                        if($category == 'Personal'){
+                                            echo ' selected';
+                                        }
+                                    ?>
+                                >Personal</option>
                         </select></td>
                     </tr>
                 </table>
+                <!-- Add hidden field for project ID --> 
+                <?php
+                    if(!empty($project_id)){
+                        echo '<input type="hidden" name="id" value"' . $project_id . '" />';
+                    }
+                ?>                        
                 <input class="button button--primary button--topic-php" type="submit" value="Submit" />
             </form>
         </div>
