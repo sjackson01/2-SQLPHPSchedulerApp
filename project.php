@@ -17,6 +17,10 @@ if(isset($_GET['id'])){
 //Receive input through title text box and category dropdown 
 //Verify request method is POST 
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
+    //Prevent duplicate projects
+    //Filter input will return null if the filter value is not set
+    //Additional conditionals not necessary
+    $project_id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT);
     //Filter input and remove white space from beginning and end of our feilds 
     $title = trim(filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING));
     $category = trim(filter_input(INPUT_POST, 'category', FILTER_SANITIZE_STRING));
@@ -27,7 +31,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     }else{
         
        //Insert $title and $category records into projects table
-       if(add_project($title, $category)){
+       //Add project_id to prevent duplicate records using hidden input below
+       if(add_project($title, $category, $project_id)){
             //Successful insert (true returned) re-direct to project list page
             header('Location: project_list.php');
             exit;
@@ -99,7 +104,7 @@ include 'inc/header.php';
                 <!-- Add hidden field for project ID --> 
                 <?php
                     if(!empty($project_id)){
-                        echo '<input type="hidden" name="id" value"' . $project_id . '" />';
+                        echo "<input type='hidden' name='id' value='$project_id' />";
                     }
                 ?>                        
                 <input class="button button--primary button--topic-php" type="submit" value="Submit" />

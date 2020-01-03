@@ -71,12 +71,17 @@ function get_task_list($filter = null){
 
 }
 
-function add_project($title, $category){
+//Add optional product_id parameter 
+function add_project($title, $category, $project_id = null){
     include 'connection.php';
+    //Create SQL statement to update project when $project_id value not nulll
+    if($project_id) {
+        $sql = 'UPDATE projects SET title = ?, category = ? WHERE project_id = ?';
+    } else {
     //Insert record into title and cateogry
     //Value placeholders 
     $sql = 'INSERT INTO projects(title, category)  VALUES(?, ?)';
-
+    }
     try {
         //Pass $sql insert into prepared statement
         $results = $db->prepare($sql);
@@ -84,6 +89,10 @@ function add_project($title, $category){
         $results->bindValue(1,$title, PDO::PARAM_STR);
         //Bind $category argument to value placeholder and define parameter
         $results->bindValue(2,$category, PDO::PARAM_STR);
+         //Bind optional project_id argument to value placeholder and define parameter
+        if($project_id){
+        $results->bindValue(3,$project_id, PDO::PARAM_INT);
+        }
         //Execute the query
         $results->execute();
     }catch (Exception $e){
