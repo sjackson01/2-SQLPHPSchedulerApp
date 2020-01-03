@@ -120,14 +120,37 @@ function get_project($project_id){
     return $results->fetch();
 }
 
-
-function add_task($project_id, $title, $date, $time){
+function get_task($task_id){
     include 'connection.php';
+    //Modify Select to pull fields in the order we specify 
+    $sql = 'SELECT task_id, title, date, time, project_id FROM tasks WHERE task_id = ?';
+
+    try {
+        //Pass $sql insert into prepared statement
+        $results = $db->prepare($sql);
+        //Bind $project_id argument to value placeholder and define parameter
+        $results->bindValue(1,$task_id, PDO::PARAM_INT);
+        //Execute the query
+        $results->execute();
+    }catch (Exception $e){
+        echo "Error: " . $e->getMessage() . "<br /> ";
+        return false;
+    }
+    return $results->fetch();
+}
+
+//Add optional task id parameter 
+function add_task($project_id, $title, $date, $time, $task_id = null){
+    include 'connection.php';
+    //Create SQL statement to update project when $task_id value not null
+    if($task_id){
+        $sql = 'UPDATE tasks SET project_id = ?, title = ?, date = ?, time = ? WHERE task_id = ?';
+    } else {
     //Insert record into project_id title date and time
     //Value placeholders 
     $sql = 'INSERT INTO tasks(project_id, title, date, time)  
             VALUES(?, ?, ?, ?)';
-
+    }
     try {
         //Pass $sql insert into prepared statement
         $results = $db->prepare($sql);
@@ -136,6 +159,10 @@ function add_task($project_id, $title, $date, $time){
         $results->bindValue(2,$title, PDO::PARAM_STR);
         $results->bindValue(3,$date, PDO::PARAM_STR);
         $results->bindValue(4,$time, PDO::PARAM_STR);
+        //Bind optional project_id argument to value placeholder and define parameter
+        if($task_id){
+        $results->bindValue(5,$task_id, PDO::PARAM_INT);
+        }
         //Execute the query
         $results->execute();
     }catch (Exception $e){
