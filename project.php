@@ -4,6 +4,15 @@ require 'inc/functions.php';
 $pageTitle = "Project | Time Tracker";
 $page = "projects";
 
+//Get id from query string link in project_list.php 
+//Use id to pull project details using get project funtion
+//Get project function will return an array 
+if(isset($_GET['id'])){
+    //Use list funtion to add those array values into individual variables
+    list($project_id, $title, $category) = 
+    get_project(filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT));
+}
+
 //Receive input through title text box and category dropdown 
 //Verify request method is POST 
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
@@ -34,7 +43,15 @@ include 'inc/header.php';
 <div class="section page">
     <div class="col-container page-container">
         <div class="col col-70-md col-60-lg col-center">
-            <h1 class="actions-header">Add Project</h1>
+            <h1 class="actions-header">
+            <!-- Change header based on project_id $_GET --> 
+            <?php
+            if(!empty($project_id)){
+                echo 'Update';
+            }else{
+                echo 'Add';
+            }
+            Add ?>Project</h1>
             <!-- TEST display error message --> 
             <?php
             if(isset($error_message)){
