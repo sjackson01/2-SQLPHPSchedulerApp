@@ -23,9 +23,13 @@ include 'inc/header.php';
             <div class="form-container">
                 <ul class="items">
                     <!-- Pull project_id, title, category from projects table -->
+                    <!-- Add links to project.php projects -->
                         <?php 
                         foreach(get_project_list() as $item){
-                                echo '<li>' . $item['title']. "</li>";
+                                echo "<li><a href='project.php?id=" 
+                                . $item['project_id'] . "'>"
+                                . $item['title'] 
+                                . "</a></li>";
                         }
                         ?>
                 </ul>
