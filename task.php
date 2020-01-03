@@ -8,9 +8,21 @@ $page = "tasks";
 //We can use these vairales now even if they are empty
 $project_id = $title = $date = $time = '';
 
+//Get id from query string link in task_list.php 
+//Use id to pull task details using get project funtion
+//Get task function will return an array 
+if(isset($_GET['id'])){
+    //Use list funtion to add those array values into individual variables
+    list($task_id, $title, $date, $time, $project_id) = 
+    get_task(filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT));
+}
+
+
 //Receive input through inputs 
 //Verify request method is POST 
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
+    //Get task_id in order to pass to add task function 
+    $task_id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT);
     //Filter input and remove white space from beginning and end of our feilds 
     $project_id= trim(filter_input(INPUT_POST, 'project_id', FILTER_SANITIZE_NUMBER_INT));
     $title = trim(filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING));
@@ -36,8 +48,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
           {
         $error_message = 'Invalide Date';
     }else{    
-       //Insert $title and $category records into projects table
-       if(add_task($project_id, $title, $date, $time)){
+       //Add new task to task list or update 
+       if(add_task($project_id, $title, $date, $time, $task_id)){
             //Successful insert (true returned) re-direct to task list page
             header('Location: task_list.php');
             exit;
@@ -54,7 +66,16 @@ include 'inc/header.php';
 <div class="section page">
     <div class="col-container page-container">
         <div class="col col-70-md col-60-lg col-center">
-            <h1 class="actions-header">Add Task</h1>
+            <h1 class="actions-header">
+            <!-- Change header based on query string received from task_list.php --> 
+            <?php
+                if(!empty($task_id)){
+                    echo 'Update';
+                }else{
+                    echo 'Add';    
+                }
+            ?>
+            Task</h1>
             <!-- Display error message if input field empty -->
             <?php
             if(isset($error_message)){
@@ -112,6 +133,12 @@ include 'inc/header.php';
                         </td>
                     </tr>
                 </table>
+                 <!-- Add hidden field for task ID to prevent duplicate when updating --> 
+                 <?php
+                    if(!empty($task_id)){
+                        echo "<input type='hidden' name='id' value='$task_id' />";
+                    }
+                ?>              
                 <input class="button button--primary button--topic-php" type="submit" value="Submit" />
             </form>
         </div>
