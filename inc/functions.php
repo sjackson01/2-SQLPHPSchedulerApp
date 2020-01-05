@@ -139,6 +139,26 @@ function get_task($task_id){
     return $results->fetch();
 }
 
+function delete_task($task_id){
+    include 'connection.php';
+    //Modify Select to pull fields in the order we specify 
+    $sql = 'DELETE FROM tasks WHERE task_id = ?';
+
+    try {
+        //Pass $sql delete into prepared statement
+        $results = $db->prepare($sql);
+        //Bind $task_id argument to value placeholder and define parameter
+        $results->bindValue(1,$task_id, PDO::PARAM_INT);
+        //Execute the query
+        $results->execute();
+    }catch (Exception $e){
+        echo "Error: " . $e->getMessage() . "<br /> ";
+        return false;
+    }
+    //Return true when records are deleted
+    return true;
+}
+
 //Add optional task id parameter 
 function add_task($project_id, $title, $date, $time, $task_id = null){
     include 'connection.php';
