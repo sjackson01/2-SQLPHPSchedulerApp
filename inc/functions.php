@@ -120,6 +120,34 @@ function get_project($project_id){
     return $results->fetch();
 }
 
+function delete_project($project_id){
+    include 'connection.php';
+    //Ensure that projects with tasks cannot be deleted 
+    //By not selecting any project that has an id in the tasks table
+    $sql = 'DELETE FROM projects WHERE project_id = ?'
+    . ' AND project_id NOT IN (SELECT project_id FROM tasks)';
+    
+
+    try {
+        //Pass $sql delete into prepared statement
+        $results = $db->prepare($sql);
+        //Bind $project_id argument to value placeholder and define parameter
+        $results->bindValue(1,$project_id, PDO::PARAM_INT);
+        //Execute the query
+        $results->execute();
+    }catch (Exception $e){
+        echo "Error: " . $e->getMessage() . "<br /> ";
+        return false;
+    }
+    //Check if any rows were changed by delete 
+   if($results->rowCount() > 0){
+        return true; 
+   }else{
+        return false; 
+   }
+    
+}
+
 function get_task($task_id){
     include 'connection.php';
     //Modify Select to pull fields in the order we specify 

@@ -53,12 +53,14 @@ include 'inc/header.php';
                         . $item['title'] . 
                         "</a>";
                         //Create form for deleting records from the db 
-                        echo "<form method='post' action='task_list.php'> \n";
+                        //Confirm delete after form submission 
+                        echo "<form method='post' action='task_list.php' onsubmit=\"
+                        return confirm('Are you sure you want to delete this task?');\"> \n";
                         //Add hidden field for the task id
                         echo "<input type='hidden' value='" . $item['task_id'] . "' name='delete' /> \n";
                         echo "<input type='submit' class='button--delete' value='delete' /> \n";
                         echo "</form>";
-                        "</li>";
+                        echo "</li>";
                 }
                 ?>
                 
