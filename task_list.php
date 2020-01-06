@@ -4,6 +4,23 @@ require 'inc/functions.php';
 $page = "tasks";
 $pageTitle = "Task List | Time Tracker";
 
+//Accept delete form data
+if(isset($_POST['delete'])){
+    if(delete_task(filter_input(INPUT_POST,'delete', FILTER_SANITIZE_NUMBER_INT))){
+        //If the item is deleted re-direct and send message
+        header('location: task_list.php?msg=Task+Deleted');
+        exit;
+    }else{
+       header('location: task_list.php?msg=Unable+to+Delete+Task'); 
+       exit;
+    }    
+}
+
+//Accept message and display query string message on the screen
+if(isset($_GET['msg'])){
+    $error_message = trim(filter_input(INPUT_GET, 'msg', FILTER_SANITIZE_STRING));
+}
+
 include 'inc/header.php';
 ?>
 <div class="section catalog random">
@@ -19,7 +36,12 @@ include 'inc/header.php';
                     </span>
                 Add Task</a>
             </div>
-
+             <!-- Display error message if input field empty -->
+             <?php
+            if(isset($error_message)){
+                echo "<p class='message'>$error_message</p>";
+            }
+            ?>
             <div class="form-container">
               <ul class="items">
               <!-- Pull tasks.*, projects.title as project from projects, tasks tables -->
@@ -29,9 +51,19 @@ include 'inc/header.php';
                         echo "<li><a href='task.php?id=" 
                         . $item['task_id'] . "'>"
                         . $item['title'] . 
-                        "</a></li>";
+                        "</a>";
+                        //Create form for deleting records from the db 
+                        //Confirm delete after form submission 
+                        echo "<form method='post' action='task_list.php' onsubmit=\"
+                        return confirm('Are you sure you want to delete this task?');\"> \n";
+                        //Add hidden field for the task id
+                        echo "<input type='hidden' value='" . $item['task_id'] . "' name='delete' /> \n";
+                        echo "<input type='submit' class='button--delete' value='delete' /> \n";
+                        echo "</form>";
+                        echo "</li>";
                 }
                 ?>
+                
               </ul>
             </div>
 
